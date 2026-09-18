@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Cielo — Cafetería Artesanal</title>
+<meta name="description" content="Cafetería El Cielo: café de especialidad, repostería artesanal y un espacio para volar.">
+<style>
+  :root{
+    --cafe:#3b2a1e;
+    --cafe-oscuro:#2a1d14;
+    --crema:#f5ead9;
+    --crema-claro:#fbf6ee;
+    --dorado:#c8965a;
+    --dorado-claro:#e0b989;
+    --verde:#7a8b6f;
+    --texto:#4a3b30;
+    --oscuro-fondo:#1a130e;
+    --oscuro-seccion:#241a12;
+    --oscuro-tarjeta:#2e2218;
+    --oscuro-texto:#e8dbcb;
+    --oscuro-titulos:#f5ead9;
+  }
+
+  /* ---------- MODO OSCURO ---------- */
+  body.modo-oscuro{background:var(--oscuro-fondo);color:var(--oscuro-texto);}
+  body.modo-oscuro h1, body.modo-oscuro h2, body.modo-oscuro h3{color:var(--oscuro-titulos);}
+  body.modo-oscuro .titulo-seccion h2{color:var(--oscuro-titulos);}
+  body.modo-oscuro header.scrolled{background:rgba(26,19,14,.95);box-shadow:0 2px 12px rgba(0,0,0,.4);}
+  body.modo-oscuro header.scrolled .logo, body.modo-oscuro header.scrolled nav a{color:var(--crema);}
+  body.modo-oscuro nav.abierto{background:var(--oscuro-tarjeta);box-shadow:0 6px 12px rgba(0,0,0,.5);}
+  body.modo-oscuro nav li{border-bottom-color:#3a2d22;}
+  body.modo-oscuro nav a{color:var(--crema);}
+  body.modo-oscuro header.scrolled .menu-toggle{color:var(--crema);}
+  body.modo-oscuro .menu-fondo{background:var(--oscuro-seccion);}
+  body.modo-oscuro .tarjeta{background:var(--oscuro-tarjeta);box-shadow:0 4px 14px rgba(0,0,0,.35);}
+  body.modo-oscuro .tarjeta h3{color:var(--dorado-claro);}
+  body.modo-oscuro .tarjeta li{border-bottom-color:#4a3a2c;}
+  body.modo-oscuro .horario li{border-bottom-color:#4a3a2c;}
+  body.modo-oscuro .btn-fijo-tema{background:var(--oscuro-tarjeta);color:var(--crema);border-color:var(--dorado);}
+  body.modo-oscuro .opinion{background:var(--oscuro-tarjeta);box-shadow:0 4px 14px rgba(0,0,0,.35);}
+  body.modo-oscuro .opinion p{color:var(--oscuro-texto);}
+  body.modo-oscuro .opinion .fecha{color:#a8927c;}
+  body.modo-oscuro .form-opinion input, body.modo-oscuro .form-opinion textarea,
+  body.modo-oscuro .form-opinion select{
+    background:var(--oscuro-seccion);color:var(--crema);border-color:#4a3a2c;
+  }
+  body.modo-oscuro .form-opinion input::placeholder, body.modo-oscuro .form-opinion textarea::placeholder{color:#8a7561;}
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Georgia','Times New Roman',serif;
+    color:var(--texto);
+    background:var(--crema-claro);
+    line-height:1.6;
+  }
+  h1,h2,h3{font-family:'Palatino','Georgia',serif;}
+  a{text-decoration:none;color:inherit;}
+  img{max-width:100%;display:block;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:1rem 5%;
+    transition:background .3s, box-shadow .3s;
+  }
+  header.scrolled{
+    background:rgba(251,246,238,.95);
+    box-shadow:0 2px 12px rgba(59,42,30,.12);
+  }
+  .logo{
+    font-size:1.6rem;font-weight:bold;letter-spacing:1px;
+    color:var(--crema);
+    transition:color .3s;
+  }
+  header.scrolled .logo{color:var(--cafe);}
+  .logo span{color:var(--dorado);}
+  nav ul{display:flex;gap:2rem;list-style:none;}
+  nav a{
+    color:var(--crema);font-size:1rem;letter-spacing:.5px;
+    transition:color .3s;
+  }
+  header.scrolled nav a{color:var(--cafe);}
+  nav a:hover{color:var(--dorado);}
+  .menu-toggle{display:none;background:none;border:none;font-size:1.8rem;color:var(--crema);cursor:pointer;}
+  header.scrolled .menu-toggle{color:var(--cafe);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;
+    background:linear-gradient(rgba(42,29,20,.55),rgba(42,29,20,.7)),
+               url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    color:var(--crema);
+    padding:2rem;
+  }
+  .hero h1{font-size:clamp(2.6rem,7vw,5rem);letter-spacing:3px;}
+  .hero p{font-size:clamp(1.05rem,2.5vw,1.4rem);margin:1.2rem 0 2rem;font-style:italic;max-width:560px;}
+  .btn{
+    display:inline-block;background:var(--dorado);color:var(--cafe-oscuro);
+    padding:.85rem 2.2rem;border-radius:50px;font-size:1rem;font-weight:bold;
+    letter-spacing:1px;transition:transform .2s, background .2s;
+  }
+  .btn:hover{background:var(--dorado-claro);transform:translateY(-3px);}
+
+  /* ---------- SECCIONES ---------- */
+  section{padding:5rem 8%;max-width:1200px;margin:0 auto;}
+  .titulo-seccion{text-align:center;margin-bottom:3rem;}
+  .titulo-seccion h2{font-size:2.2rem;color:var(--cafe);}
+  .titulo-seccion .linea{
+    width:70px;height:3px;background:var(--dorado);margin:.8rem auto 0;border-radius:2px;
+  }
+
+  /* ---------- NOSOTROS ---------- */
+  .nosotros{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;}
+  .nosotros img{border-radius:14px;box-shadow:0 8px 24px rgba(59,42,30,.2);}
+  .nosotros h2{color:var(--cafe);margin-bottom:1rem;font-size:2rem;}
+  .nosotros p{margin-bottom:1rem;}
+
+  /* ---------- MENÚ ---------- */
+  .menu-fondo{background:var(--crema);}
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2rem;}
+  .tarjeta{
+    background:#fff;border-radius:14px;padding:1.8rem;
+    box-shadow:0 4px 14px rgba(59,42,30,.1);
+    transition:transform .25s, box-shadow .25s;
+  }
+  .tarjeta:hover{transform:translateY(-6px);box-shadow:0 10px 26px rgba(59,42,30,.18);}
+  .tarjeta .icono{font-size:2.2rem;margin-bottom:.6rem;}
+  .tarjeta h3{color:var(--cafe);margin-bottom:.4rem;font-size:1.25rem;}
+  .tarjeta .precio{color:var(--dorado);font-weight:bold;font-size:1.15rem;margin-top:.6rem;}
+  .tarjeta ul{list-style:none;margin-top:.5rem;}
+  .tarjeta li{padding:.25rem 0;border-bottom:1px dashed #e6d9c5;font-size:.95rem;}
+  .tarjeta li:last-child{border-bottom:none;}
+
+  /* ---------- GALERÍA ---------- */
+  .galeria{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;}
+  .galeria img{border-radius:12px;height:220px;width:100%;object-fit:cover;transition:transform .3s;}
+  .galeria img:hover{transform:scale(1.04);}
+
+  /* ---------- HORARIOS Y CONTACTO ---------- */
+  .contacto-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;}
+  .contacto-grid h3{color:var(--cafe);margin-bottom:1rem;font-size:1.4rem;}
+  .horario li{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px dashed #d9c8b0;list-style:none;}
+  .info-contacto p{margin-bottom:.8rem;}
+  .info-contacto strong{color:var(--cafe);}
+  .mapa-placeholder{
+    margin-top:1.5rem;height:200px;border-radius:12px;
+    background:linear-gradient(135deg,var(--dorado-claro),var(--crema));
+    display:flex;align-items:center;justify-content:center;
+    color:var(--cafe);font-style:italic;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--cafe-oscuro);color:var(--crema);
+    text-align:center;padding:2.5rem 1rem;
+  }
+  footer .logo{font-size:1.4rem;}
+  footer p{margin:.6rem 0;font-size:.9rem;opacity:.85;}
+  .redes{display:flex;gap:1.2rem;justify-content:center;margin-top:1rem;}
+  .redes a{
+    width:40px;height:40px;border:1px solid var(--dorado);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .25s;
+  }
+  .redes a:hover{background:var(--dorado);}
+  .redes a:hover svg{fill:var(--cafe-oscuro);}
+  .redes svg{width:18px;height:18px;fill:var(--dorado);}
+
+
+  /* ---------- BOTÓN MODO OSCURO ---------- */
+  .btn-fijo-tema{
+    position:fixed;bottom:1.5rem;right:1.5rem;z-index:200;
+    width:52px;height:52px;border-radius:50%;
+    background:#fff;color:var(--cafe);border:2px solid var(--dorado);
+    font-size:1.4rem;cursor:pointer;
+    box-shadow:0 4px 12px rgba(59,42,30,.25);
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .2s, background .3s;
+  }
+  .btn-fijo-tema:hover{transform:scale(1.1);}
+
+  /* ---------- OPINIONES ---------- */
+  .resumen-calif{text-align:center;margin-bottom:2.5rem;}
+  .resumen-calif .grande{font-size:3rem;color:var(--cafe);font-weight:bold;}
+  body.modo-oscuro .resumen-calif .grande{color:var(--dorado-claro);}
+  .estrellas{color:var(--dorado);font-size:1.3rem;letter-spacing:2px;}
+  .opiniones-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2rem;margin-bottom:3rem;}
+  .opinion{
+    background:#fff;border-radius:14px;padding:1.8rem;
+    box-shadow:0 4px 14px rgba(59,42,30,.1);
+    transition:transform .25s, box-shadow .25s;
+  }
+  .opinion:hover{transform:translateY(-6px);box-shadow:0 10px 26px rgba(59,42,30,.18);}
+  .opinion .estrellas{margin-bottom:.6rem;font-size:1.1rem;}
+  .opinion h3{margin-bottom:.3rem;font-size:1.1rem;}
+  .opinion .fecha{font-size:.85rem;color:#a08b76;margin-bottom:.8rem;display:block;}
+  .opinion p{font-style:italic;font-size:.95rem;}
+  .form-opinion{
+    max-width:600px;margin:0 auto;background:var(--crema);
+    border-radius:14px;padding:2rem;
+  }
+  body.modo-oscuro .form-opinion{background:var(--oscuro-seccion);}
+  .form-opinion h3{text-align:center;margin-bottom:1.2rem;}
+  .form-opinion label{display:block;margin:.9rem 0 .3rem;font-weight:bold;color:var(--cafe);}
+  body.modo-oscuro .form-opinion label{color:var(--dorado-claro);}
+  .form-opinion input, .form-opinion textarea, .form-opinion select{
+    width:100%;padding:.7rem .9rem;border:1px solid #d9c8b0;border-radius:8px;
+    font-family:inherit;font-size:.95rem;background:#fff;color:var(--texto);
+  }
+  .form-opinion textarea{resize:vertical;min-height:100px;}
+  .form-opinion .btn{margin-top:1.2rem;width:100%;border:none;cursor:pointer;font-family:inherit;}
+  .mensaje-enviado{
+    display:none;text-align:center;margin-top:1rem;color:var(--verde);font-weight:bold;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media(max-width:768px){
+    .menu-toggle{display:block;}
+    nav{
+      position:absolute;top:100%;left:0;right:0;
+      background:var(--crema-claro);
+      max-height:0;overflow:hidden;transition:max-height .35s ease;
+    }
+    nav.abierto{max-height:280px;box-shadow:0 6px 12px rgba(59,42,30,.15);}
+    nav ul{flex-direction:column;gap:0;padding:.5rem 0;}
+    nav li{padding:.9rem 5%;border-bottom:1px solid #eee2d0;}
+    nav a{color:var(--cafe);}
+    .nosotros,.contacto-grid{grid-template-columns:1fr;}
+    section{padding:3.5rem 6%;}
+  }
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<header id="header">
+  <a class="logo" href="#inicio">EL <span>CIELO</span></a>
+  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+  <nav id="nav">
+    <ul>
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#menu">Menú</a></li>
+      <li><a href="#galeria">Galería</a></li>
+      <li><a href="#opiniones">Opiniones</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="hero" id="inicio">
+  <h1>EL CIELO</h1>
+  <p>Un lugar donde cada taza te hace volar. Café de especialidad, repostería artesanal y momentos que abrazan.</p>
+  <a class="btn" href="#menu">Ver menú</a>
+</section>
+
+<section id="nosotros" class="nosotros">
+  <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80" alt="Interior de la cafetería El Cielo">
+  <div>
+    <h2>Nuestra historia</h2>
+    <p>El Cielo nació de un sueño sencillo: crear un refugio urbano donde el aroma del café recién tostado te haga sentir en casa, pero con los pies apenas rozando el suelo.</p>
+    <p>Seleccionamos granos de pequeños productores, los tostamos con cuidado y los preparamos con la dedicación que merece cada visita. Porque creemos que el café no es solo una bebida: es un pequeño cielo en tu día.</p>
+    <a class="btn" href="#contacto">Visítanos</a>
+  </div>
+</section>
+
+<section id="menu" class="menu-fondo" style="max-width:none;">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="titulo-seccion">
+      <h2>Nuestro menú</h2>
+      <div class="linea"></div>
+    </div>
+    <div class="menu-grid">
+      <div class="tarjeta">
+        <div class="icono">☕</div>
+        <h3>Cafés</h3>
+        <ul>
+          <li>Espresso <span>$2.50</span></li>
+          <li>Americano <span>$3.00</span></li>
+          <li>Capuchino <span>$3.75</span></li>
+          <li>Latte de vainilla <span>$4.25</span></li>
+          <li>Cold brew <span>$4.00</span></li>
+        </ul>
+      </div>
+      <div class="tarjeta">
+        <div class="icono">🍰</div>
+        <h3>Repostería</h3>
+        <ul>
+          <li>Cheesecake de frutos rojos <span>$4.50</span></li>
+          <li>Pan de plátano <span>$3.50</span></li>
+          <li>Cookie de chocolate <span>$2.75</span></li>
+          <li>Tarta de limón <span>$4.00</span></li>
+        </ul>
+      </div>
+      <div class="tarjeta">
+        <div class="icono">🥪</div>
+        <h3>Sándwiches</h3>
+        <ul>
+          <li>Caprese <span>$5.50</span></li>
+          <li>Pollo al pesto <span>$6.25</span></li>
+          <li>Jamón serrano y brie <span>$6.75</span></li>
+        </ul>
+      </div>
+      <div class="tarjeta">
+        <div class="icono">🥤</div>
+        <h3>Fríos y más</h3>
+        <ul>
+          <li>Frappé de caramelo <span>$4.75</span></li>
+          <li>Jugo natural verde <span>$3.75</span></li>
+          <li>Chocolate caliente <span>$3.50</span></li>
+          <li>Té chai latte <span>$4.00</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="galeria">
+  <div class="titulo-seccion">
+    <h2>Galería</h2>
+    <div class="linea"></div>
+  </div>
+  <div class="galeria">
+    <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80" alt="Café latte art">
+    <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=600&q=80" alt="Barista preparando café">
+    <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=600&q=80" alt="Interior acogedor">
+    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=600&q=80" alt="Postres en vitrina">
+  </div>
+</section>
+
+
+<section id="opiniones">
+  <div class="titulo-seccion">
+    <h2>Calificaciones y opiniones</h2>
+    <div class="linea"></div>
+  </div>
+
+  <div class="resumen-calif">
+    <span class="grande">4.8</span>
+    <div class="estrellas">★★★★★</div>
+    <p>Basado en 126 opiniones de nuestros clientes</p>
+  </div>
+
+  <div class="opiniones-grid">
+    <div class="opinion">
+      <div class="estrellas">★★★★★</div>
+      <h3>Mariana G.</h3>
+      <span class="fecha">Hace 2 semanas</span>
+      <p>“El mejor capuchino de la ciudad. El ambiente es increíble, me siento en casa cada vez que vengo. ¡El pan de plátano es adictivo!”</p>
+    </div>
+    <div class="opinion">
+      <div class="estrellas">★★★★★</div>
+      <h3>Carlos R.</h3>
+      <span class="fecha">Hace 1 mes</span>
+      <p>“Vengo a trabajar aquí tres veces por semana. WiFi rápido, música suave y el cold brew es espectacular. Totalmente recomendado.”</p>
+    </div>
+    <div class="opinion">
+      <div class="estrellas">★★★★☆</div>
+      <h3>Lucía F.</h3>
+      <span class="fecha">Hace 1 mes</span>
+      <p>“Lugar hermoso y el cheesecake de frutos rojos es una nube, literal. Solo le falta más espacio de estacionamiento, por eso le doy 4 estrellas.”</p>
+    </div>
+    <div class="opinion">
+      <div class="estrellas">★★★★★</div>
+      <h3>Andrés M.</h3>
+      <span class="fecha">Hace 2 meses</span>
+      <p>“El personal es súper amable y te explican el origen de cada café. Se nota la pasión por lo que hacen. Mi lugar favorito los domingos.”</p>
+    </div>
+    <div class="opinion">
+      <div class="estrellas">★★★★★</div>
+      <h3>Sofía T.</h3>
+      <span class="fecha">Hace 3 meses</span>
+      <p>“Pedí el latte de vainilla con la tarta de limón y fue una combinación celestial, como su nombre. Volveré seguro.”</p>
+    </div>
+    <div class="opinion">
+      <div class="estrellas">★★★★★</div>
+      <h3>Jorge H.</h3>
+      <span class="fecha">Hace 3 meses</span>
+      <p>“Perfecto para una cita o para leer un libro. La decoración, el aroma, todo invita a quedarse. Felicidades al equipo de El Cielo.”</p>
+    </div>
+  </div>
+
+  <form class="form-opinion" id="formOpinion">
+    <h3>Deja tu opinión</h3>
+    <label for="nombre">Tu nombre</label>
+    <input type="text" id="nombre" placeholder="Ej. Ana Pérez" required>
+    <label for="calificacion">Tu calificación</label>
+    <select id="calificacion" required>
+      <option value="5">★★★★★ (5) Excelente</option>
+      <option value="4">★★★★☆ (4) Muy bueno</option>
+      <option value="3">★★★☆☆ (3) Bueno</option>
+      <option value="2">★★☆☆☆ (2) Regular</option>
+      <option value="1">★☆☆☆☆ (1) Malo</option>
+    </select>
+    <label for="opinion">Tu comentario</label>
+    <textarea id="opinion" placeholder="Cuéntanos tu experiencia en El Cielo..." required></textarea>
+    <button type="submit" class="btn">Enviar opinión</button>
+    <p class="mensaje-enviado" id="mensajeEnviado">¡Gracias por tu opinión! ☕</p>
+  </form>
+</section>
+
+<section id="contacto">
+  <div class="titulo-seccion">
+    <h2>Encuéntranos</h2>
+    <div class="linea"></div>
+  </div>
+  <div class="contacto-grid">
+    <div>
+      <h3>Horarios</h3>
+      <ul class="horario">
+        <li><span>Lunes – Viernes</span><span>7:00 – 20:00</span></li>
+        <li><span>Sábado</span><span>8:00 – 21:00</span></li>
+        <li><span>Domingo</span><span>9:00 – 18:00</span></li>
+      </ul>
+    </div>
+    <div class="info-contacto">
+      <h3>Contacto</h3>
+      <p><strong>Dirección:</strong> Av. de las Nubes 123, Centro</p>
+      <p><strong>Teléfono:</strong> +52 55 1234 5678</p>
+      <p><strong>Correo:</strong> hola@elcielocafe.com</p>
+      <div class="mapa-placeholder">Aquí puedes integrar Google Maps</div>
+    </div>
+  </div>
+</section>
+
+<button class="btn-fijo-tema" id="btnTema" aria-label="Activar modo oscuro">🌙</button>
+
+<footer>
+  <div class="logo">EL <span>CIELO</span></div>
+  <p>Cafetería artesanal · Donde cada taza te hace volar</p>
+  <p>© 2026 El Cielo. Todos los derechos reservados.</p>
+  <div class="redes">
+    <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.1-1.1.1-1.5.2-1.9.3-.5.2-.8.4-1.1.7-.3.3-.5.6-.7 1.1-.1.4-.3.8-.3 1.9-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 1.1.2 1.5.3 1.9.2.5.4.8.7 1.1.3.3.6.5 1.1.7.4.1.8.3 1.9.3 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1.1-.1 1.5-.2 1.9-.3.5-.2.8-.4 1.1-.7.3-.3.5-.6.7-1.1.1-.4.3-.8.3-1.9.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1.1-.2-1.5-.3-1.9-.2-.5-.4-.8-.7-1.1-.3-.3-.6-.5-1.1-.7-.4-.1-.8-.3-1.9-.3-1.2-.1-1.6-.1-4.7-.1zm0 2.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 9.1a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2zm5.7-9.4a1.3 1.3 0 1 1-2.6 0 1.3 1.3 0 0 1 2.6 0z"/></svg></a>
+    <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
+    <a href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.7.8-.8 1-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4 0-.5.1-.7l.4-.5c.1-.2.1-.3 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7a8.6 8.6 0 0 0 3.3 3.3c1.2.5 1.7.6 2.3.5.7-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2-.1-.1-.2-.2-.4-.3z"/></svg></a>
+  </div>
+</footer>
+
+<script>
+  // Sombra del menú al hacer scroll
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Menú móvil
+  const toggle = document.getElementById('menuToggle');
+  const nav = document.getElementById('nav');
+  toggle.addEventListener('click', () => nav.classList.toggle('abierto'));
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('abierto')));
+
+  // ---------- MODO OSCURO ----------
+  const btnTema = document.getElementById('btnTema');
+  const aplicarTema = (oscuro) => {
+    document.body.classList.toggle('modo-oscuro', oscuro);
+    btnTema.textContent = oscuro ? '☀️' : '🌙';
+    btnTema.setAttribute('aria-label', oscuro ? 'Activar modo claro' : 'Activar modo oscuro');
+  };
+  // Recordar preferencia del usuario
+  const temaGuardado = localStorage.getItem('tema-el-cielo');
+  if (temaGuardado === 'oscuro') aplicarTema(true);
+  btnTema.addEventListener('click', () => {
+    const oscuro = document.body.classList.toggle('modo-oscuro');
+    btnTema.textContent = oscuro ? '☀️' : '🌙';
+    localStorage.setItem('tema-el-cielo', oscuro ? 'oscuro' : 'claro');
+  });
+
+  // ================== CONEXIÓN CON GOOGLE SHEETS ==================
+  // PASO 5 DE LA GUÍA: pega aquí tu URL de Apps Script (la que termina en /exec)
+  const SCRIPT_URL = "PEGAR_AQUI_TU_URL_DE_APPS_SCRIPT";
+
+  const estrellasDe = (n) => '★'.repeat(n) + '☆'.repeat(5 - n);
+
+  // ---------- CARGAR OPINIONES DESDE GOOGLE SHEETS ----------
+  function cargarOpiniones() {
+    if (!SCRIPT_URL || SCRIPT_URL.includes('PEGAR_AQUI')) return; // aún no configurado
+    fetch(SCRIPT_URL)
+      .then(r => r.json())
+      .then(opiniones => {
+        const grid = document.querySelector('.opiniones-grid');
+        if (!opiniones.length) return;
+        grid.innerHTML = opiniones.map(o => `
+          <div class="opinion">
+            <div class="estrellas">${estrellasDe(o.calificacion)}</div>
+            <h3>${o.nombre}</h3>
+            <span class="fecha">${o.fecha}</span>
+            <p>"${o.comentario}"</p>
+          </div>`).join('');
+      })
+      .catch(() => { /* si falla, se quedan las opiniones de ejemplo */ });
+  }
+  cargarOpiniones();
+
+  // ---------- ENVIAR OPINIONES A GOOGLE SHEETS ----------
+  document.getElementById('formOpinion').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const btn = form.querySelector('button[type="submit"]');
+    const datos = new URLSearchParams({
+      nombre: document.getElementById('nombre').value.trim(),
+      calificacion: document.getElementById('calificacion').value,
+      opinion: document.getElementById('opinion').value.trim()
+    });
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    // mode no-cors evita bloqueos de CORS; Google Sheets recibe los datos igual
+    fetch(SCRIPT_URL, { method: 'POST', body: datos })
+      .catch(() => {})   // con no-cors la respuesta no se puede leer, no importa
+      .finally(() => {
+        document.getElementById('mensajeEnviado').style.display = 'block';
+        form.reset();
+        btn.disabled = false;
+        btn.textContent = 'Enviar opinión';
+        cargarOpiniones(); // recargar para mostrar la opinión nueva
+        setTimeout(() => {
+          document.getElementById('mensajeEnviado').style.display = 'none';
+        }, 4000);
+      });
+  });
+
+</script>
+
+</body>
+</html>
