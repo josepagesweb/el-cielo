@@ -478,7 +478,7 @@
 
   // ---------- CARGAR OPINIONES DESDE GOOGLE SHEETS ----------
   function cargarOpiniones() {
-    if (!SCRIPT_URL || SCRIPT_URL.includes('PEGAR_AQUI')) return; // aún no configurado
+    if (!SCRIPT_URL || SCRIPT_URL.includes('https://script.google.com/macros/s/AKfycbyl_YWhNDTwIO2yw9V10yvqsrOJp02pJApDUB5xIxva4Rvo60jRrpS78G7bwX9G59SQ/exec')) return; // aún no configurado
     fetch(SCRIPT_URL)
       .then(r => r.json())
       .then(opiniones => {
